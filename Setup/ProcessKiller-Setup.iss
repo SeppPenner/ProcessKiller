@@ -6,6 +6,7 @@
 #define MyAppPublisher "Hämmer Electronics"
 #define MyAppURL "http://softwareload24.de.tl/"
 #define MyAppExeName "ProcessKiller.exe"
+#define MyPath "F:\TODO\C# und VB\ProcessKiller"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -24,11 +25,11 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\Tim\Documents\Visual Studio 2013\Projects\ProcessKiller\ProcessKiller\bin\Debug\License.txt
-InfoAfterFile=C:\Users\Tim\Documents\Visual Studio 2013\Projects\ProcessKiller\ProcessKiller\bin\Debug\Readme.txt
-OutputDir=C:\Users\Tim\Documents\Visual Studio 2013\Projects\ProcessKiller\Setup
+LicenseFile={#MyPath}\ProcessKiller\bin\Debug\License.txt
+InfoAfterFile={#MyPath}\ProcessKiller\bin\Debug\Readme.txt
+OutputDir={#MyPath}\Setup
 OutputBaseFilename=ProcessKiller-Setup
-SetupIconFile=C:\Users\Tim\Documents\Visual Studio 2013\Projects\ProcessKiller\ProcessKiller\bin\Debug\ProcessKiller.ico
+SetupIconFile={#MyPath}\ProcessKiller\bin\Debug\ProcessKiller.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -41,10 +42,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\Tim\Documents\Visual Studio 2013\Projects\ProcessKiller\ProcessKiller\bin\Debug\ProcessKiller.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Tim\Documents\Visual Studio 2013\Projects\ProcessKiller\ProcessKiller\bin\Debug\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Tim\Documents\Visual Studio 2013\Projects\ProcessKiller\ProcessKiller\bin\Debug\License.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Tim\Documents\Visual Studio 2013\Projects\ProcessKiller\ProcessKiller\bin\Debug\Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\ProcessKiller\bin\Debug\ProcessKiller.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\ProcessKiller\bin\Debug\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\ProcessKiller\bin\Debug\License.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\ProcessKiller\bin\Debug\Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
