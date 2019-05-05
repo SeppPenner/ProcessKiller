@@ -2,11 +2,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ProcessKiller"
-#define MyAppVersion "1.0.0.0"
+#define MyAppVersion "1.0.0.1"
 #define MyAppPublisher "Hämmer Electronics"
 #define MyAppURL "http://softwareload24.de.tl/"
 #define MyAppExeName "ProcessKiller.exe"
-#define MyPath "F:\TODO\C# und VB\ProcessKiller"
+#define MyPath "C:\Users\tim\Desktop\Updaten_Snyk\ProcessKiller"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
