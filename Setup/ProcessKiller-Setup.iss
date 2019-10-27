@@ -2,11 +2,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ProcessKiller"
-#define MyAppVersion "1.0.0.1"
+#define MyAppVersion "1.0.1.0"
 #define MyAppPublisher "Hämmer Electronics"
 #define MyAppURL "http://softwareload24.de.tl/"
 #define MyAppExeName "ProcessKiller.exe"
-#define MyPath "C:\Users\tim\Desktop\Updaten_Snyk\ProcessKiller"
+#define MyPath "C:\Users\Tim\Documents\Git\C# und VB\ProcessKiller"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -22,14 +22,14 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={commonpf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile={#MyPath}\ProcessKiller\bin\Debug\License.txt
-InfoAfterFile={#MyPath}\ProcessKiller\bin\Debug\Readme.txt
+LicenseFile={#MyPath}\ProcessKiller\bin\Release\License.txt
+InfoAfterFile={#MyPath}\ProcessKiller\bin\Release\Readme.txt
 OutputDir={#MyPath}\Setup
 OutputBaseFilename=ProcessKiller-Setup
-SetupIconFile={#MyPath}\ProcessKiller\bin\Debug\ProcessKiller.ico
+SetupIconFile={#MyPath}\ProcessKiller\bin\Release\ProcessKiller.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -42,10 +42,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "{#MyPath}\ProcessKiller\bin\Debug\ProcessKiller.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\ProcessKiller\bin\Debug\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\ProcessKiller\bin\Debug\License.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\ProcessKiller\bin\Debug\Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\ProcessKiller\bin\Release\ProcessKiller.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\ProcessKiller\bin\Release\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\ProcessKiller\bin\Release\License.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPath}\ProcessKiller\bin\Release\Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
