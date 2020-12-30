@@ -2,7 +2,7 @@ ProcessKiller
 =============
 
 ProcessKiller is an executable to kill processes depending on the configuration.
-The executable was written and tested in .Net 4.8.
+The executable was written and tested in .Net 5.0.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/pa534fxrf9xa8w9r?svg=true)](https://ci.appveyor.com/project/SeppPenner/processkiller)
 [![GitHub issues](https://img.shields.io/github/issues/SeppPenner/ProcessKiller.svg)](https://github.com/SeppPenner/ProcessKiller/issues)
@@ -14,6 +14,4 @@ The executable was written and tested in .Net 4.8.
 Change history
 --------------
 
-* **Version 1.0.1.0 (2019-10-27)** : Updated nuget packages, added GitVersionTask.
-* **Version 1.0.0.1 (2019-05-05)** : Updated .Net version to 4.8.
-* **Version 1.0.0.0 (2017-03-24)** :  1.0 release.
+See the [Changelog](https://github.com/SeppPenner/512kbChecker/blob/master/Changelog.md).

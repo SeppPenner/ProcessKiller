@@ -2,11 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ProcessKiller"
-#define MyAppVersion "1.0.1.0"
+#define MyAppVersion "1.0.2.0"
 #define MyAppPublisher "Hämmer Electronics"
 #define MyAppURL "http://softwareload24.de.tl/"
 #define MyAppExeName "ProcessKiller.exe"
-#define MyPath "C:\Users\Tim\Documents\Git\C# und VB\ProcessKiller"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -25,11 +24,11 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={commonpf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile={#MyPath}\ProcessKiller\bin\Release\License.txt
-InfoAfterFile={#MyPath}\ProcessKiller\bin\Release\Readme.txt
-OutputDir={#MyPath}\Setup
+LicenseFile=..\src\ProcessKiller\License.txt
+InfoAfterFile=..\src\ProcessKiller\Readme.txt
+OutputDir=..\Setup
 OutputBaseFilename=ProcessKiller-Setup
-SetupIconFile={#MyPath}\ProcessKiller\bin\Release\ProcessKiller.ico
+SetupIconFile=..\src\ProcessKiller\ProcessKiller.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -42,10 +41,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "{#MyPath}\ProcessKiller\bin\Release\ProcessKiller.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\ProcessKiller\bin\Release\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\ProcessKiller\bin\Release\License.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MyPath}\ProcessKiller\bin\Release\Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ProcessKiller\bin\Release\net5.0-windows\ProcessKiller.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ProcessKiller\bin\Release\net5.0-windows\ProcessKiller.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ProcessKiller\bin\Release\net5.0-windows\Config.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ProcessKiller\bin\Release\net5.0-windows\License.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
