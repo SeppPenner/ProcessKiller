@@ -24,7 +24,7 @@ namespace ProcessKiller
         /// <summary>
         /// The configuration.
         /// </summary>
-        private static Config config = new Config();
+        private static Config config = new ();
 
         /// <summary>
         /// The main method.
@@ -34,7 +34,7 @@ namespace ProcessKiller
             try
             {
                 var location = Assembly.GetExecutingAssembly().Location;
-                config = ImportConfiguration(Path.Combine(Directory.GetParent(location)?.FullName ?? string.Empty, "Config.xml"));
+                config = ImportConfiguration(Path.Combine(Directory.GetParent(location)?.FullName ?? string.Empty, "Config.xml")) ?? new();
                 
                 foreach (var process in config.Processes.SelectMany(p => System.Diagnostics.Process.GetProcessesByName(p.Name)))
                 {
@@ -52,10 +52,10 @@ namespace ProcessKiller
         /// </summary>
         /// <param name="fileName">The file name.</param>
         /// <returns>A new <see cref="Config"/> object.</returns>
-        private static Config ImportConfiguration(string fileName)
+        private static Config? ImportConfiguration(string fileName)
         {
             var xDocument = XDocument.Load(fileName);
-            return CreateObjectFromString<Config>(xDocument);
+            return CreateObjectFromString<Config?>(xDocument);
         }
 
         /// <summary>
@@ -64,10 +64,10 @@ namespace ProcessKiller
         /// <typeparam name="T">The type parameter.</typeparam>
         /// <param name="xDocument">The X document.</param>
         /// <returns>A new object of type <see cref="T"/>.</returns>
-        private static T CreateObjectFromString<T>(XDocument xDocument)
+        private static T? CreateObjectFromString<T>(XDocument xDocument)
         {
             var xmlSerializer = new XmlSerializer(typeof(T));
-            return (T)xmlSerializer.Deserialize(new StringReader(xDocument.ToString()));
+            return (T?)xmlSerializer.Deserialize(new StringReader(xDocument.ToString()));
         }
     }
 }

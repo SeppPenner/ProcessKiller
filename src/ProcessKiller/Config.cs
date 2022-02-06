@@ -21,6 +21,6 @@ namespace ProcessKiller
         /// <summary>
         /// Gets or sets the processes.
         /// </summary>
-        public List<Process> Processes { get; set; }
+        public List<Process> Processes { get; set; } = new();
     }
 }

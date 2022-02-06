@@ -17,12 +17,11 @@ namespace ProcessKiller
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the full name.
         /// </summary>
-        // ReSharper disable once UnusedMember.Global
-        public string FullName { get; set; }
+        public string FullName { get; set; } = string.Empty;
     }
 }
