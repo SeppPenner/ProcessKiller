@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Config.cs" company="Hämmer Electronics">
 //   Copyright (c) All rights reserved.
 // </copyright>
@@ -7,20 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ProcessKiller
-{
-    using System;
-    using System.Collections.Generic;
+namespace ProcessKiller;
 
+/// <summary>
+/// The configuration class.
+/// </summary>
+[Serializable]
+public class Config
+{
     /// <summary>
-    /// The configuration class.
+    /// Gets or sets the processes.
     /// </summary>
-    [Serializable]
-    public class Config
-    {
-        /// <summary>
-        /// Gets or sets the processes.
-        /// </summary>
-        public List<Process> Processes { get; set; } = new();
-    }
+    public List<Process> Processes { get; set; } = new();
 }

@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Program.cs" company="Hämmer Electronics">
 //   Copyright (c) All rights reserved.
 // </copyright>
@@ -7,67 +7,59 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ProcessKiller
+namespace ProcessKiller;
+
+/// <summary>
+/// The main program.
+/// </summary>
+public static class Program
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.Xml.Linq;
-    using System.Xml.Serialization;
+    /// <summary>
+    /// The configuration.
+    /// </summary>
+    private static Config config = new();
 
     /// <summary>
-    /// The main program.
+    /// The main method.
     /// </summary>
-    public static class Program
+    private static void Main()
     {
-        /// <summary>
-        /// The configuration.
-        /// </summary>
-        private static Config config = new ();
-
-        /// <summary>
-        /// The main method.
-        /// </summary>
-        private static void Main()
+        try
         {
-            try
+            var location = Assembly.GetExecutingAssembly().Location;
+            config = ImportConfiguration(Path.Combine(Directory.GetParent(location)?.FullName ?? string.Empty, "Config.xml")) ?? new();
+
+            foreach (var process in config.Processes.SelectMany(p => System.Diagnostics.Process.GetProcessesByName(p.Name)))
             {
-                var location = Assembly.GetExecutingAssembly().Location;
-                config = ImportConfiguration(Path.Combine(Directory.GetParent(location)?.FullName ?? string.Empty, "Config.xml")) ?? new();
-                
-                foreach (var process in config.Processes.SelectMany(p => System.Diagnostics.Process.GetProcessesByName(p.Name)))
-                {
-                    process.Kill();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace);
+                process.Kill();
             }
         }
-
-        /// <summary>
-        /// Imports the configuration.
-        /// </summary>
-        /// <param name="fileName">The file name.</param>
-        /// <returns>A new <see cref="Config"/> object.</returns>
-        private static Config? ImportConfiguration(string fileName)
+        catch (Exception ex)
         {
-            var xDocument = XDocument.Load(fileName);
-            return CreateObjectFromString<Config?>(xDocument);
+            Console.WriteLine(ex.StackTrace);
         }
+    }
 
-        /// <summary>
-        /// Creates a object from a <see cref="string"/>.
-        /// </summary>
-        /// <typeparam name="T">The type parameter.</typeparam>
-        /// <param name="xDocument">The X document.</param>
-        /// <returns>A new object of type <see cref="T"/>.</returns>
-        private static T? CreateObjectFromString<T>(XDocument xDocument)
-        {
-            var xmlSerializer = new XmlSerializer(typeof(T));
-            return (T?)xmlSerializer.Deserialize(new StringReader(xDocument.ToString()));
-        }
+    /// <summary>
+    /// Imports the configuration.
+    /// </summary>
+    /// <param name="fileName">The file name.</param>
+    /// <returns>A new <see cref="Config"/> object.</returns>
+    private static Config? ImportConfiguration(string fileName)
+    {
+        var xDocument = XDocument.Load(fileName);
+        return CreateObjectFromString<Config?>(xDocument);
+    }
+
+    /// <summary>
+    /// Creates a object from a <see cref="string"/>.
+    /// </summary>
+    /// <typeparam name="T">The type parameter.</typeparam>
+    /// <param name="xDocument">The X document.</param>
+    /// <returns>A new object of type <see cref="T"/>.</returns>
+    private static T? CreateObjectFromString<T>(XDocument xDocument)
+    {
+        var xmlSerializer = new XmlSerializer(typeof(T));
+        return (T?)xmlSerializer.Deserialize(new StringReader(xDocument.ToString()));
     }
 }
