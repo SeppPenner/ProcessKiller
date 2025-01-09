@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ProcessKiller"
-#define MyAppVersion "1.0.6.0"
+#define MyAppVersion "1.0.7.0"
 #define MyAppPublisher "Hämmer Electronics"
 #define MyAppURL "http://softwareload24.de.tl/"
 #define MyAppExeName "ProcessKiller.exe"
