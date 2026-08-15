@@ -24,12 +24,6 @@
         <None Update="Config.xml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="languages\de-DE.xml">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="languages\en-US.xml">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="License.txt">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

@@ -13,9 +13,15 @@ One solution `src/ProcessKiller.sln` with exactly one project:
 
 Layout inside `src/ProcessKiller`:
 
-- `Program.cs`: everything the application does. `Main` locates `Config.xml` next to the executable,
-  deserializes it and kills the matching processes. The private helpers `ImportConfiguration` and
-  `CreateObjectFromString<T>` do one thing each, keep new logic in that shape.
+- `Program.cs`: `Main` locates `Config.xml` next to the executable via `AppContext.BaseDirectory`,
+  hands it to the two services and turns an exception into the message, the stack trace and exit
+  code 1. It holds no logic of its own, keep it that way.
+- `Services/ConfigService.cs` plus `Services/IConfigService.cs`: `ImportConfiguration` reads the file,
+  `ImportConfigurationFromString` does the `XmlSerializer` work. The split exists so that the
+  deserialization can be tested without a file on disk.
+- `Services/ProcessService.cs` plus `Services/IProcessService.cs`: `KillProcesses` kills every
+  running process named in the configuration and returns how many kills it requested. A single
+  failing kill is reported on the console and does not stop the loop.
 - `Config.cs`: the root of the configuration file, a single `List<Process> Processes`.
 - `Process.cs`: one entry of that list, `Name` and `FullName`. The type name collides with
   `System.Diagnostics.Process`, see the quirks below.
@@ -93,8 +99,14 @@ Do not silently "clean up" these, they are existing behaviour:
   would make existing configuration files fail to deserialize.
 - **`GetProcessesByName` wants the name without `.exe`.** That is why `Name` and `FullName` exist
   side by side. A configuration that puts `Test.exe` into `Name` silently matches nothing.
-- **The application is silent on success.** No console output, no exit code other than 0 unless it
-  crashes. Judge a run by which processes are gone, not by stdout.
+- **The application is silent on success.** It writes nothing and returns 0. Output only appears
+  when a single process could not be killed (the run continues, exit code stays 0) or when the
+  configuration could not be read at all (message, stack trace, exit code 1). Judge a normal run by
+  which processes are gone, not by stdout.
+- **`Process` must not become `abstract` again.** Up to version 1.0.7.0 the model class was
+  `abstract`, which made `XmlSerializer` throw `The specified type is abstract: name='Process'` on
+  every single start. The application never killed anything in that state and still exited with 0,
+  because the only `catch` printed the stack trace and returned normally.
 - **The installer is tracked despite `.gitignore`.** `Setup/ProcessKiller-Setup.exe` is excluded by
   the `*.exe` rule and was force added. Every release needs `git add -f Setup/ProcessKiller-Setup.exe`.
 - **`Config.xml` is overwritten on every build.** `CopyToOutputDirectory=Always`, so a configuration

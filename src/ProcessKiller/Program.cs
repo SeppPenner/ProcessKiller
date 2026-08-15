@@ -15,51 +15,38 @@ namespace ProcessKiller;
 public static class Program
 {
     /// <summary>
-    /// The configuration.
+    /// The name of the configuration file, expected next to the executable.
     /// </summary>
-    private static Config config = new();
+    private const string ConfigFileName = "Config.xml";
+
+    /// <summary>
+    /// The configuration service.
+    /// </summary>
+    private static readonly IConfigService ConfigService = new ConfigService();
+
+    /// <summary>
+    /// The process service.
+    /// </summary>
+    private static readonly IProcessService ProcessService = new ProcessService();
 
     /// <summary>
     /// The main method.
     /// </summary>
-    private static void Main()
+    /// <returns>0 if the configuration was read, 1 if it was not.</returns>
+    private static int Main()
     {
         try
         {
-            var location = Assembly.GetExecutingAssembly().Location;
-            config = ImportConfiguration(Path.Combine(Directory.GetParent(location)?.FullName ?? string.Empty, "Config.xml")) ?? new();
-
-            foreach (var process in config.Processes.SelectMany(p => System.Diagnostics.Process.GetProcessesByName(p.Name)))
-            {
-                process.Kill();
-            }
+            var fileName = Path.Combine(AppContext.BaseDirectory, ConfigFileName);
+            var config = ConfigService.ImportConfiguration(fileName);
+            ProcessService.KillProcesses(config);
+            return 0;
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             Console.WriteLine(ex.StackTrace);
+            return 1;
         }
-    }
-
-    /// <summary>
-    /// Imports the configuration.
-    /// </summary>
-    /// <param name="fileName">The file name.</param>
-    /// <returns>A new <see cref="Config"/> object.</returns>
-    private static Config? ImportConfiguration(string fileName)
-    {
-        var xDocument = XDocument.Load(fileName);
-        return CreateObjectFromString<Config?>(xDocument);
-    }
-
-    /// <summary>
-    /// Creates a object from a <see cref="string"/>.
-    /// </summary>
-    /// <typeparam name="T">The type parameter.</typeparam>
-    /// <param name="xDocument">The X document.</param>
-    /// <returns>A new object of type <see cref="T"/>.</returns>
-    private static T? CreateObjectFromString<T>(XDocument xDocument)
-    {
-        var xmlSerializer = new XmlSerializer(typeof(T));
-        return (T?)xmlSerializer.Deserialize(new StringReader(xDocument.ToString()));
     }
 }
