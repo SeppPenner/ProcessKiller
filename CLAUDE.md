@@ -35,10 +35,11 @@ Layout inside `src/ProcessKiller`:
   `ApplicationIcon`. Only `License.txt` is additionally copied to the output directory,
   `Readme.txt` is not part of the publish.
 
-`Setup` holds the Inno Setup script `ProcessKiller-Setup.iss`, the publish helper
-`build-setup-files.bat` and the built installer `ProcessKiller-Setup.exe`. The installer is
-**tracked** even though `.gitignore` excludes `*.exe`, it was added with `git add -f` and has to be
-added that way again on every release.
+`Setup` holds the Inno Setup script `ProcessKiller-Setup.iss` and the publish helper
+`build-setup-files.bat`. The compiled installer `ProcessKiller-Setup.exe` lands in the same folder
+but is **not** tracked, it is covered by the `*.exe` rule of `.gitignore`. Since version 1.0.8.0 it
+is published as an asset of the GitHub release that belongs to the tag. Do not force add it back
+into the repository.
 
 Layout inside `src/ProcessKiller.Tests`:
 
@@ -134,8 +135,10 @@ Do not silently "clean up" these, they are existing behaviour:
   `abstract`, which made `XmlSerializer` throw `The specified type is abstract: name='Process'` on
   every single start. The application never killed anything in that state and still exited with 0,
   because the only `catch` printed the stack trace and returned normally.
-- **The installer is tracked despite `.gitignore`.** `Setup/ProcessKiller-Setup.exe` is excluded by
-  the `*.exe` rule and was force added. Every release needs `git add -f Setup/ProcessKiller-Setup.exe`.
+- **The installer used to be tracked.** Up to version 1.0.7.0 `Setup/ProcessKiller-Setup.exe` was
+  force added past the `*.exe` rule, so every release added its full size to the history for good.
+  The versions up to 1.0.7.0 are therefore still in the history, only new ones stay out. Getting
+  them out too would need a history rewrite and a force push.
 - **`Config.xml` is overwritten on every build.** `CopyToOutputDirectory=Always`, so a configuration
   edited in `bin` is gone after the next build. Edit the file in the project directory.
 - **AppVeyor badge without CI in the repository.** `README.md` links an AppVeyor build that is
@@ -163,14 +166,27 @@ Do not silently "clean up" these, they are existing behaviour:
 5. Tag the commit with the plain version number, no `v` prefix (`1.0.8`, `1.0.7`, ...). The existing
    tags are lightweight tags, create new ones the same way. The tag has to exist **before** the
    installer is built, otherwise GitVersion burns a prerelease version into the shipped executable.
-6. Run `Setup/build-setup-files.bat`, then compile `Setup/ProcessKiller-Setup.iss` with
-   `ISCC.exe`.
-7. `git add -f Setup/ProcessKiller-Setup.exe`, commit as `Updated setup.`.
-8. Push the commits and the tag.
+6. Push the commits and the tag.
+7. Run `Setup/build-setup-files.bat`, then compile `Setup/ProcessKiller-Setup.iss` with `ISCC.exe`.
+8. Create the GitHub release for that tag and attach `Setup/ProcessKiller-Setup.exe` as an asset.
+   The installer is never committed.
 
 The version in the `Changelog.md` has four parts (`1.0.8.0`), the tag has three (`1.0.8`).
 GitVersion turns the tag into the assembly version, so an untagged commit produces something like
 `1.0.8-1+Branch.master.Sha...`.
+
+`gh` is not installed on this machine. The release goes through the REST API with the token that is
+already in the Windows Credential Manager, the same one `git push` uses:
+
+```powershell
+$c = "protocol=https`nhost=github.com`n`n" | git credential fill
+$tok = ($c | Select-String '^password=').ToString().Split('=',2)[1]
+```
+
+Never write that token into a file or print it. Create the release with
+`POST https://api.github.com/repos/SeppPenner/ProcessKiller/releases` and upload the asset to
+`https://uploads.github.com/repos/SeppPenner/ProcessKiller/releases/<id>/assets?name=ProcessKiller-Setup.exe`
+with `Content-Type: application/octet-stream`.
 
 ## Git
 

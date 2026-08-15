@@ -13,6 +13,12 @@ ProcessKiller is an executable to kill processes depending on the configuration.
 [![Patreon](https://img.shields.io/badge/Patreon-F96854?logo=patreon&logoColor=white)](https://patreon.com/SeppPennerOpenSourceDevelopment)
 [![PayPal](https://img.shields.io/badge/PayPal-00457C?logo=paypal&logoColor=white)](https://paypal.me/th070795)
 
+Download
+--------
+
+The installer is attached to the [latest release](https://github.com/SeppPenner/ProcessKiller/releases/latest).
+It is self contained, so the target machine needs no installed .NET runtime.
+
 Change history
 --------------
 
