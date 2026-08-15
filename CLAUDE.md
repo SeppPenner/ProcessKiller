@@ -9,7 +9,7 @@ package: no `GeneratePackageOnBuild`, no push script.
 
 One solution `src/ProcessKiller.sln` with exactly two projects:
 
-- `src/ProcessKiller/ProcessKiller.csproj`, `OutputType` `Exe`, `TargetFramework` `net9.0`, the
+- `src/ProcessKiller/ProcessKiller.csproj`, `OutputType` `Exe`, `TargetFramework` `net10.0`, the
   actual application.
 - `src/ProcessKiller.Tests/ProcessKiller.Tests.csproj`, MSTest, added in version 1.0.8.0.
 
@@ -67,7 +67,7 @@ dotnet build src/ProcessKiller.sln -c Release
 dotnet test src/ProcessKiller.sln -c Release
 ```
 
-- Single target framework `net9.0` in both projects, no multi-targeting, no `RuntimeIdentifiers`.
+- Single target framework `net10.0` in both projects, no multi-targeting, no `RuntimeIdentifiers`.
   Nothing in the code is Windows specific, but killing Windows processes is the entire point and the
   installer is Windows only.
 - All build properties live directly in the two `.csproj` files and are duplicated there. There is
