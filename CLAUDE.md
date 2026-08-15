@@ -7,9 +7,11 @@ and kills every running process with one of those names. It has no user interfac
 no output on success. It is shipped as an Inno Setup installer, it is **not** published as a NuGet
 package: no `GeneratePackageOnBuild`, no push script.
 
-One solution `src/ProcessKiller.sln` with exactly one project:
+One solution `src/ProcessKiller.sln` with exactly two projects:
 
-- `src/ProcessKiller/ProcessKiller.csproj`, `OutputType` `Exe`, `TargetFramework` `net9.0`.
+- `src/ProcessKiller/ProcessKiller.csproj`, `OutputType` `Exe`, `TargetFramework` `net9.0`, the
+  actual application.
+- `src/ProcessKiller.Tests/ProcessKiller.Tests.csproj`, MSTest, added in version 1.0.8.0.
 
 Layout inside `src/ProcessKiller`:
 
@@ -36,6 +38,20 @@ Layout inside `src/ProcessKiller`:
 **tracked** even though `.gitignore` excludes `*.exe`, it was added with `git add -f` and has to be
 added that way again on every release.
 
+Layout inside `src/ProcessKiller.Tests`:
+
+- `ConfigServiceTests.cs`: deserialization of one and of several processes, the empty list, broken
+  XML, reading from disk, the missing file and the shipped `Config.xml`.
+- `ProcessServiceTests.cs`: the empty configuration, an unknown name, an empty name and one test
+  that really kills a process. That test copies `cmd.exe` to a temp directory under a name built
+  from a `Guid`, so it can never hit a process that does not belong to it.
+- `TestDataProvider.cs`: builds the configuration XML and the `Config` objects both test classes use.
+- `GlobalUsings.cs`: all usings of the test project.
+
+The project links `..\ProcessKiller\Config.xml` as `TestData\Config.xml` with
+`CopyToOutputDirectory=Always`, so the file that is actually shipped is the one under test. Do not
+replace that link with a copy, a copy would stop failing when the shipped file breaks.
+
 Repository root: `README.md` (the only user documentation, note the uppercase spelling, the sibling
 repositories use `Readme.md`), `Changelog.md`, `License.txt` (MIT), `.gitignore` and
 `.gitattributes`. There is no `Updating.md`, no `HowToUse.md`, no screenshots and no `.github`
@@ -47,11 +63,15 @@ folder.
 dotnet build src/ProcessKiller.sln -c Release
 ```
 
-- Single target framework `net9.0` in the one project, no multi-targeting, no `RuntimeIdentifiers`.
+```powershell
+dotnet test src/ProcessKiller.sln -c Release
+```
+
+- Single target framework `net9.0` in both projects, no multi-targeting, no `RuntimeIdentifiers`.
   Nothing in the code is Windows specific, but killing Windows processes is the entire point and the
   installer is Windows only.
-- All build properties live directly in `src/ProcessKiller/ProcessKiller.csproj`. There is **no**
-  `Directory.Build.props` in this repository.
+- All build properties live directly in the two `.csproj` files and are duplicated there. There is
+  **no** `Directory.Build.props` in this repository.
 - `TreatWarningsAsErrors` is enabled, so every warning breaks the build, NuGet warnings (`NU****`)
   from restore included. A clean build reports zero warnings, keep it that way.
 - `NU1803` (HTTP source usage during restore) is the one warning suppressed via `NoWarn`. Fix
@@ -62,9 +82,14 @@ dotnet build src/ProcessKiller.sln -c Release
 - Restore needs nuget.org. If a private feed is configured globally on the machine and answers 404
   for public packages, restore fails with `NU1301`. Then build with an explicit source:
   `dotnet build src/ProcessKiller.sln -c Release --source https://api.nuget.org/v3/index.json`.
-- There is no test project. A behaviour change is verified by running the published executable
-  against a `Config.xml` and checking which processes are gone afterwards. Never claim a run
-  happened without running it.
+- Tests are MSTest, in the single test project `src/ProcessKiller.Tests`, which follows the same
+  package set as the sibling repositories: `Microsoft.NET.Test.Sdk`, `MSTest.TestAdapter`,
+  `MSTest.TestFramework`, `coverlet.collector` and `GitVersion.MsBuild`. `dotnet test` runs 11
+  tests, they need no network and no fixture outside the repository. The tests that touch the disk
+  or start a process work below `Path.GetTempPath()` and clean up afterwards, so a test run leaves
+  the working tree untouched. Never claim a test run happened without running it.
+- Beyond the tests, a behaviour change is verified by running the published executable against a
+  `Config.xml` and checking which processes are gone afterwards.
 
 ## Code conventions
 
