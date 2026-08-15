@@ -30,8 +30,10 @@ Layout inside `src/ProcessKiller`:
 - `Config.xml`: the shipped default configuration, copied to the output directory with
   `CopyToOutputDirectory=Always`. It contains one dummy entry `Test` / `Test.exe`.
 - `GlobalUsings.cs`: all usings of the project.
-- `License.txt`, `Readme.txt`, `ProcessKiller.ico`: content for the installer. `License.txt` and
-  `Readme.txt` are also copied to the output directory, the icon becomes the `ApplicationIcon`.
+- `License.txt`, `Readme.txt`, `ProcessKiller.ico`: content for the installer. The Inno Setup script
+  reads `Readme.txt` and `License.txt` straight out of this directory, and the icon becomes the
+  `ApplicationIcon`. Only `License.txt` is additionally copied to the output directory,
+  `Readme.txt` is not part of the publish.
 
 `Setup` holds the Inno Setup script `ProcessKiller-Setup.iss`, the publish helper
 `build-setup-files.bat` and the built installer `ProcessKiller-Setup.exe`. The installer is
@@ -145,6 +147,11 @@ Do not silently "clean up" these, they are existing behaviour:
 - **`Setup/build-setup-files.bat` deletes all `bin` and `obj` folders** below `src` before it
   publishes, and ends with `pause`. Running it from a script needs `cd /d` into `Setup` first,
   because the `cd ..\src` in the first line is relative to the start directory.
+- **The publish is self contained since version 1.0.8.0.** `build-setup-files.bat` publishes with
+  `-r win-x64 --self-contained true`, so the installed application needs no .NET runtime on the
+  target machine. That is why the installer jumped from 1.7 MB to 26 MB. The check is
+  `ProcessKiller.runtimeconfig.json`: `includedFrameworks` means self contained, `framework` means
+  it is not.
 
 ## Releasing
 
