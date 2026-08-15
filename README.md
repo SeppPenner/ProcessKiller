@@ -16,4 +16,4 @@ ProcessKiller is an executable to kill processes depending on the configuration.
 Change history
 --------------
 
-See the [Changelog](https://github.com/SeppPenner/512kbChecker/blob/master/Changelog.md).
+See the [Changelog](https://github.com/SeppPenner/ProcessKiller/blob/master/Changelog.md).
